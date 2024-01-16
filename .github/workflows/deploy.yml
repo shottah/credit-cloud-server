@@ -45,6 +45,7 @@ jobs:
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}"
 
   deploy-container:
+    needs: build-and-push
     permissions:
       contents: 'read'
       id-token: 'write'
