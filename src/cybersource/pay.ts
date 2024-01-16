@@ -1,6 +1,5 @@
 import { MutationProcessPaymentArgs } from '../__generated__/resolvers-types';
 const cybersourceRestApi = require('cybersource-rest-client');
-const configuration = require('./configuration');
 
 function processNetAuthorizedPayment(
   processPaymentArgs: MutationProcessPaymentArgs
