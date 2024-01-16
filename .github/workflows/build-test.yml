@@ -1,0 +1,49 @@
+name: Build & Test
+
+on:
+  pull_request:
+    branches:
+      - development
+
+env:
+  PROJECT_ID: wambackend
+  GAR_LOCATION: us-west1
+  REPOSITORY: credit-cloud
+  IMAGE: server
+
+jobs:
+  build:
+    permissions:
+      contents: 'read'
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build Container
+        run: |-
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}" ./
+
+  test:
+    permissions:
+      contents: 'read'
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+  
+      - name: Install pnpm
+        run: npm install -g pnpm
+  
+      - name: Install dependencies
+        run: pnpm install
+  
+      - name: Run tests
+        run: pnpm run test
