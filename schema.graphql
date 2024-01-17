@@ -38,11 +38,20 @@ type Query {
 
 type Mutation {
   createThing(thing: CreateThing!): Thing
-  processPayment(args: ProcessPaymentArgs!): ProcessPaymentResult
+  processPayment(args: ProcessPaymentArgs!): ProcessPaymentResult!
+}
+
+type OrderInfo {
+  totalAmount: String
+  amountAuthorized: String
+  currency: String
 }
 
 type ProcessPaymentResult {
-  success: Boolean!
+  status: Int
+  transactionId: String
+  transactionStatus: String
+  orderInfo: OrderInfo
   message: String
 }
 

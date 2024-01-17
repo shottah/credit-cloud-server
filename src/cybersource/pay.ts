@@ -1,9 +1,10 @@
 import { MutationProcessPaymentArgs } from '../__generated__/resolvers-types';
+import { PaymentResponse } from '../cybersource/utils';
 const cybersourceRestApi = require('cybersource-rest-client');
 
-function processNetAuthorizedPayment(
+export const configurePaymentAuthorization = (
   processPaymentArgs: MutationProcessPaymentArgs
-) {
+) => {
   try {
     const { args } = processPaymentArgs;
     const {
@@ -83,27 +84,14 @@ function processNetAuthorizedPayment(
 
     var instance = new cybersourceRestApi.PaymentsApi(configObject, apiClient);
 
-    return instance.createPayment(
+    return {
+      instance,
       requestObj,
-      function (error: any, data: any, response: any) {
-        if (error) {
-          console.error('Error : ', error);
-          throw new Error('Error processing payment: ' + error.message);
-        } else if (data) {
-          console.log('Data : ', data);
-          console.log('Response : ', response);
-          console.log(
-            'Response Code of Process a Payment : ',
-            response ? response['status'] : 'No response status'
-          );
-          return response;
-        }
-      }
-    );
+    };
   } catch (error) {
     console.error('\nException on calling the API : ' + error);
     throw new Error('Error processing payment: ' + error.message);
   }
-}
+};
 
-export default processNetAuthorizedPayment;
+export const createPaymentAuthInstance = (instance: any, requestObj: any) => {};
